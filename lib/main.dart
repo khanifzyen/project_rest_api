@@ -34,6 +34,7 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   late Future<Album> album;
+  final TextEditingController _controller = TextEditingController();
 
   @override
   void initState() {
@@ -47,18 +48,37 @@ class _MyHomePageState extends State<MyHomePage> {
       appBar: AppBar(
         title: Text(widget.title),
       ),
-      body: FutureBuilder(
-        future: album,
-        builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            return Center(child: Text(snapshot.data!.title));
-          } else if (snapshot.hasError) {
-            return Text('${snapshot.error}');
-          }
-          return const Center(
-            child: CircularProgressIndicator(),
-          );
-        },
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          TextField(
+            controller: _controller,
+            decoration: const InputDecoration(labelText: 'Enter Title'),
+          ),
+          const SizedBox(height: 5),
+          ElevatedButton(
+            onPressed: () {
+              setState(() {
+                album = NetworkManager().createAlbum(_controller.text);
+              });
+            },
+            child: const Text('Create Data'),
+          ),
+          const SizedBox(height: 10),
+          FutureBuilder(
+            future: album,
+            builder: (context, snapshot) {
+              if (snapshot.hasData) {
+                return Center(child: Text(snapshot.data!.title));
+              } else if (snapshot.hasError) {
+                return Text('${snapshot.error}');
+              }
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
+            },
+          ),
+        ],
       ),
     );
   }
