@@ -1,12 +1,12 @@
 class Album {
-  final int userId;
-  final int id;
-  final String title;
+  int? userId;
+  int? id;
+  String? title;
 
   Album({
-    required this.userId,
-    required this.id,
-    required this.title,
+    this.userId,
+    this.id,
+    this.title,
   });
 
   factory Album.fromJson(Map<String, dynamic> json) {
